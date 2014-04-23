@@ -1,0 +1,11 @@
+---
+elasticsearch_version: 1.0.1
+elasticsearch_base_install_dir: /apps
+elasticsearch_base_logs_dir: /logs
+elasticsearch_base_data_dir: /data
+elasticsearch_cluster_name: elasticsearch
+elasticsearch_cluster_members:
+  - server1
+  - server2
+elasticsearch_plugins:
+  - lmenezes/elasticsearch-kopf

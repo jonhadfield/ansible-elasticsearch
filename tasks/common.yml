@@ -1,0 +1,7 @@
+---
+- name: create base installation directory
+  file: path={{ elasticsearch_base_install_dir }} mode=0755 state=directory
+- name: create logs directory
+  file: path={{ elasticsearch_base_logs_dir }} mode=0755 state=directory
+- name: create base data directory
+  file: path={{ elasticsearch_base_data_dir }} mode=0755 state=directory

@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Jon Hadfield
+  description: 
+  company:
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: EL
+    versions:
+    - all
+  categories:
+  - database
+  - database:nosql
+
+dependencies: []

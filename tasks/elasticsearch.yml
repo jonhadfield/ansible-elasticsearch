@@ -1,0 +1,58 @@
+---
+# Prereqs
+- name: create elasticsearch group
+  group: name=elsearch state=present
+- name: create elasticsearch user
+  user: name=elsearch state=present createhome=no shell=/bin/false group=elsearch
+- name: create elasticsearch data directory
+  file: dest={{ elasticsearch_base_data_dir }}/elasticsearch state=directory owner=elsearch group=elsearch
+  notify:
+    - restart elasticsearch
+# Get and Install
+- name: download elasticsearch
+  get_url: url=https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ elasticsearch_version }}.tar.gz dest=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz
+- name: extract elasticsearch installation
+  unarchive: src=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz copy=no dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
+  notify:
+    - restart elasticsearch
+# Configure
+- name: install elasticsearch startup script
+  template: src=elasticsearch-sysvinit.j2 dest=/etc/init.d/elasticsearch owner=root group=root mode=0755
+  notify:
+    - restart elasticsearch
+- name: install elasticsearch sysconfig
+  template: src=elasticsearch-sysconfig.j2 dest=/etc/sysconfig/elasticsearch owner=root group=root mode=0755
+  notify:
+    - restart elasticsearch
+- name: install elasticsearch configuration
+  template: src=elasticsearch-config.yml.j2 dest={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/config/elasticsearch.yml owner=elsearch group=elsearch mode=0755
+  notify:
+    - restart elasticsearch
+- name: install elasticsearch logging configuration
+  copy: src=logging.yml dest={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/config/logging.yml owner=elsearch group=elsearch mode=0755
+  notify:
+    - restart elasticsearch
+- name: create elasticsearch scripts directory
+  file: dest={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/scripts state=directory owner=elsearch group=elsearch
+# Uninstall plugins - forced to do this until we can install in an idempotent way
+- name: remove existing plugins
+  file: path={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/plugins state=absent
+# Prepare runtime
+- name: create elasticsearch run directory
+  file: dest=/var/run/elasticsearch state=directory owner=elsearch group=elsearch
+- name: grant directory permissions to elasticsearch user for installation directory
+  file: path={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} owner=elsearch group=elsearch recurse=true
+- name: create elasticsearch logs directory
+  file: dest={{ elasticsearch_base_logs_dir }}/elasticsearch state=directory
+- name: grant directory permissions to elasticsearch user for logs directory
+  file: path={{ elasticsearch_base_logs_dir }}/elasticsearch owner=elsearch group=elsearch
+- name: create symlink to elasticsearch installation
+  file: src={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} path={{ elasticsearch_base_install_dir }}/elasticsearch state=link
+# Install plugins
+- name: install plugins
+  command: "{{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/plugin -install {{ item }} --silent --timeout 1m"
+  with_items: elasticsearch_plugins
+  when: elasticsearch_plugins is defined
+# Run
+- name: ensure elasticsearch is started runs on boot
+  service: name=elasticsearch state=started enabled=yes
