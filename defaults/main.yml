@@ -1,4 +1,7 @@
 ---
+elasticsearch_online_install: false
+elasticsearch_installer_path: /var/elasticsearch
+elasticsearch_plugins_path: /var/elasticsearch
 elasticsearch_version: 1.0.1
 elasticsearch_base_install_dir: /apps
 elasticsearch_base_logs_dir: /logs
@@ -7,5 +10,5 @@ elasticsearch_cluster_name: elasticsearch
 elasticsearch_cluster_members:
   - server1
   - server2
-elasticsearch_plugins:
-  - lmenezes/elasticsearch-kopf
+#elasticsearch_plugins:
+#  - lmenezes/elasticsearch-kopf

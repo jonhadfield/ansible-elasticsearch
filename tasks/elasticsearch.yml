@@ -8,13 +8,22 @@
   file: dest={{ elasticsearch_base_data_dir }}/elasticsearch state=directory owner=elsearch group=elsearch
   notify:
     - restart elasticsearch
-# Get and Install
-- name: download elasticsearch
+# Online Install
+- name: online install | download elasticsearch
   get_url: url=https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ elasticsearch_version }}.tar.gz dest=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz
-- name: extract elasticsearch installation
+- name: online install | extract elasticsearch installation
   unarchive: src=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz copy=no dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
   notify:
     - restart elasticsearch
+  when: elasticsearch_online_install
+
+# Offline Install
+- name: offline install | copy and extract elasticsearch installation
+  unarchive: src={{ elasticsearch_installer_path }}/elasticsearch-{{ elasticsearch_version }}.tar.gz dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
+  notify:
+    - restart elasticsearch
+  when: not elasticsearch_online_install
+
 # Configure
 - name: install elasticsearch startup script
   template: src=elasticsearch-sysvinit.j2 dest=/etc/init.d/elasticsearch owner=root group=root mode=0755
@@ -52,7 +61,7 @@
 - name: install plugins
   command: "{{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/plugin -install {{ item }} --silent --timeout 1m"
   with_items: elasticsearch_plugins
-  when: elasticsearch_plugins is defined
+  when: elasticsearch_plugins is defined and elasticsearch_online_install
 # Run
 - name: ensure elasticsearch is started runs on boot
   service: name=elasticsearch state=started enabled=yes
