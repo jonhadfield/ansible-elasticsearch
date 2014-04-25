@@ -11,6 +11,7 @@
 # Online Install
 - name: online install | download elasticsearch
   get_url: url=https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-{{ elasticsearch_version }}.tar.gz dest=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz
+  when: elasticsearch_online_install
 - name: online install | extract elasticsearch installation
   unarchive: src=/var/tmp/elasticsearch-{{ elasticsearch_version }}.tar.gz copy=no dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
   notify:
