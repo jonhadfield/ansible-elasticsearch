@@ -20,7 +20,7 @@
 
 # Offline Install
 - name: offline install | copy and extract elasticsearch installation
-  unarchive: src={{ elasticsearch_installer_path }}/elasticsearch-{{ elasticsearch_version }}.tar.gz dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
+  unarchive: src={{ elasticsearch_installer_path }} dest={{ elasticsearch_base_install_dir }}/ mode=0700 creates={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
   notify:
     - restart elasticsearch
   when: not elasticsearch_online_install
