@@ -21,8 +21,9 @@ Role Variables
     elasticsearch_cluster_members:              # List elasticsearch cluster members
       - server1
       - server2
-    elasticsearch_plugins:                  # A list of plugins to install
+    elasticsearch_plugins:                      # A list of plugins to install
       - lmenezes/elasticsearch-kopf
+    elasticsearch_http_port: 9200               # HTTP port to listen on
 
 
 Dependencies

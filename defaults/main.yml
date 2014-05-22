@@ -10,5 +10,6 @@ elasticsearch_cluster_name: elasticsearch
 elasticsearch_cluster_members:
   - server1
   - server2
+elasticsearch_http_port: 9200
 #elasticsearch_plugins:
 #  - lmenezes/elasticsearch-kopf
