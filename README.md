@@ -17,7 +17,8 @@ Role Variables
     elasticsearch_version: 1.0.1                # The version of elasticsearch to install
     elasticsearch_base_install_dir: /apps       # Where elasticsearch will be installed
     elasticsearch_base_logs_dir: /logs          # Where elasticsearch will log to
-    elasticsearch_base_data_dir: /data          # Where elasticsearch will store its data
+    elasticsearch_data_paths:                   Where elasticsearch will store its data
+      - /var/elasticsearch/data
     elasticsearch_cluster_name: elasticsearch   # The cluster name
     elasticsearch_cluster_members:              # List elasticsearch cluster members
       - server1

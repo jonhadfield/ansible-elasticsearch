@@ -146,7 +146,7 @@ path.conf: {{ elasticsearch_base_install_dir }}/elasticsearch/config
 
 # Path to directory where to store index data allocated for this node.
 #
-path.data: {{ elasticsearch_base_data_dir }}/elasticsearch/data
+path.data: {% for member in elasticsearch_data_paths %}{{ member }}{% if not loop.last %},{% endif %}{% endfor %} 
 #
 # Can optionally include more than one location, causing data to be striped across
 # the locations (a la RAID 0) on a file level, favouring locations with most free

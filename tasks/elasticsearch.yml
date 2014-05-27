@@ -4,8 +4,9 @@
   group: name=elsearch state=present
 - name: create elasticsearch user
   user: name=elsearch state=present createhome=no shell=/bin/false group=elsearch
-- name: create elasticsearch data directory
-  file: dest={{ elasticsearch_base_data_dir }}/elasticsearch state=directory owner=elsearch group=elsearch
+- name: create elasticsearch data directories
+  file: dest={{ item }} state=directory owner=elsearch group=elsearch mode=0750
+  with_items: elasticsearch_data_paths
   notify:
     - restart elasticsearch
 # Online Install

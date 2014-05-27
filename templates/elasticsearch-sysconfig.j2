@@ -26,7 +26,7 @@ MAX_MAP_COUNT=262144
 LOG_DIR={{ elasticsearch_base_logs_dir }}/elasticsearch
 
 # Elasticsearch data directory
-DATA_DIR={{ elasticsearch_base_data_dir }}/elasticsearch
+DATA_DIR={{ elasticsearch_data_paths|first }}
 
 # Elasticsearch work directory
 WORK_DIR=/tmp/elasticsearch
