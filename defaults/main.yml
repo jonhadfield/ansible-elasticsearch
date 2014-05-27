@@ -1,6 +1,7 @@
 ---
 elasticsearch_online_install: false
 elasticsearch_installer_path: /var/elasticsearch
+#elasticsearch_java_home:
 elasticsearch_plugins_path: /var/elasticsearch
 elasticsearch_version: 1.0.1
 elasticsearch_base_install_dir: /apps

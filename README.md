@@ -12,6 +12,7 @@ Role Variables
 --------------
     elasticsearch_online_install: true          # Whether or not to perform an online installation by downloading the installer and plugins
     elasticsearch_installer_path: /var/es       # Where to find the installer for an offline installation
+    elasticsearch_java_home:                    # The home of the java installation to run against (Optional)
     elasticsearch_plugins_path: /var/plugins    # Where to find plugins for an offline installation
     elasticsearch_version: 1.0.1                # The version of elasticsearch to install
     elasticsearch_base_install_dir: /apps       # Where elasticsearch will be installed
