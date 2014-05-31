@@ -13,5 +13,12 @@ elasticsearch_cluster_members:
   - server1
   - server2
 elasticsearch_http_port: 9200
+node.master: "true"
+elasticsearch_node_master: "true"
+elasticsearch_node_data: "true"
+elasticsearch_index_shards: 5
+elasticsearch_index_replicas: 1
+elasticsearch_minimum_masters: 1
+elasticsearch_transport_port: 9300
 #elasticsearch_plugins:
 #  - lmenezes/elasticsearch-kopf
