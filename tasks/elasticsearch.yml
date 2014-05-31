@@ -58,7 +58,7 @@
 - name: grant directory permissions to elasticsearch user for logs directory
   file: path={{ elasticsearch_base_logs_dir }}/elasticsearch owner=elsearch group=elsearch
 - name: create symlink to elasticsearch installation
-  file: src={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} path={{ elasticsearch_base_install_dir }}/elasticsearch state=link
+  file: src={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} path={{ elasticsearch_base_install_dir }}/elasticsearch state=link force=yes
 # Install plugins
 - name: install plugins
   command: "{{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/bin/plugin -install {{ item }} --silent --timeout 1m"
