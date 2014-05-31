@@ -23,9 +23,15 @@ Role Variables
     elasticsearch_cluster_members:              # List elasticsearch cluster members
       - server1
       - server2
+    elasticsearch_http_port: 9200               # HTTP port to listen on
+    elasticsearch_node_master: "true"           # Make node eligible to be master
+    elasticsearch_node_data: "true"             # Make node contain data
+    elasticsearch_index_shards: 5               # Number of shards for each index
+    elasticsearch_index_replicas: 1             # Number of replicas for each index
+    elasticsearch_minimum_masters: 1            # Minimum number of eligible masters
+    elasticsearch_transport_port: 9300          # Transport port
     elasticsearch_plugins:                      # A list of plugins to install
       - lmenezes/elasticsearch-kopf
-    elasticsearch_http_port: 9200               # HTTP port to listen on
 
 
 Dependencies
