@@ -26,6 +26,11 @@
     - restart elasticsearch
   when: not elasticsearch_online_install
 
+# Generate teardown
+- name: generate teardown script
+  template: src=teardown_elasticsearch.sh.j2 dest={{ elasticsearch_base_install_dir }}/teardown_elasticsearch_{{ elasticsearch_version }}.sh owner=root group=root mode=0750
+
+
 # Configure
 - name: install elasticsearch startup script
   template: src=elasticsearch-sysvinit.j2 dest=/etc/init.d/elasticsearch owner=root group=root mode=0755

@@ -1,0 +1,66 @@
+#!/bin/bash
+check_running () {
+        APP_RUNNING=`ps -ef | grep elasticsearch-{{ elasticsearch_version }}.jar | grep -v grep | wc -l`
+        return $APP_RUNNING
+}
+kill_by_path () {
+        SIGNAL=$1
+        ps -ef | grep elasticsearch-{{ elasticsearch_version }}.jar | grep -v grep | awk '{print $2}' | xargs kill $SIGNAL
+}
+check_running
+RUNNING=$?
+if [ $RUNNING -gt 0 ]; then
+        if [ -f /etc/init.d/elasticsearch ]; then
+                echo "Stopping elasticsearch with rc script"
+                /etc/init.d/elasticsearch stop && sleep 5
+        fi
+fi
+check_running
+RUNNING=$?
+if [ $RUNNING -gt 0 ]; then
+        echo "Stopping elasticsearch with TERM signal"
+        kill_by_path -TERM
+        sleep 3
+fi
+check_running
+RUNNING=$?
+if [ $RUNNING -gt 0 ]; then
+        echo "Stopping elasticsearch with KILL signal"
+        kill_by_path -KILL
+        sleep 1
+fi
+check_running
+RUNNING=$?
+if [ $RUNNING -gt 0 ]; then
+        echo "Failed to stop application"
+        exit 1
+else
+        echo "Application: elasticsearch stopped"
+fi
+if [ -d {{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} ]; then
+        rm -r {{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}
+        echo "Application directory: {{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} deleted."
+else
+        echo "Application directory: {{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }} doesn't exist."
+fi
+
+
+/sbin/chkconfig --del elasticsearch
+echo "Service elasticsearch deleted with chkconfig."
+
+if [ -h {{ elasticsearch_base_install_dir }}/elasticsearch  ]; then
+        rm {{ elasticsearch_base_install_dir }}/elasticsearch
+        echo "Symlink: {{ elasticsearch_base_install_dir }}/elasticsearch deleted."
+else
+        echo "Symlink: {{ elasticsearch_base_install_dir }}/elasticsearch doesn't exist."
+fi
+
+if [ -f /etc/init.d/elasticsearch ]; then
+        rm /etc/init.d/elasticsearch
+        echo "Startup script: /etc/init.d/elasticsearch deleted."
+else
+        echo "Startup script: /etc/init.d/elasticsearch doesn't exist."
+fi
+rm -- "$0"
+echo "Deleted tear down script."
+exit 0
