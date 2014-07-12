@@ -12,6 +12,7 @@ elasticsearch_cluster_name: elasticsearch
 elasticsearch_cluster_members:
   - server1
   - server2
+elasticsearch_heap_size: "256m"
 elasticsearch_http_port: 9200
 elasticsearch_node_master: "true"
 elasticsearch_node_data: "true"
