@@ -181,7 +181,11 @@ path.plugins: {{ elasticsearch_base_install_dir }}/elasticsearch/plugins
 #
 # Set this property to true to lock the memory:
 #
+{% if elasticsearch_mlockall is defined and elasticsearch_mlockall != None %}
+bootstrap.mlockall: {{ elasticsearch_mlockall }}
+{% else %}
 # bootstrap.mlockall: true
+{% endif %}
 
 # Make sure that the ES_MIN_MEM and ES_MAX_MEM environment variables are set
 # to the same value, and that the machine has enough memory to allocate

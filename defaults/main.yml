@@ -20,5 +20,6 @@ elasticsearch_index_shards: 5
 elasticsearch_index_replicas: 1
 elasticsearch_minimum_masters: 1
 elasticsearch_transport_port: 9300
+elasticsearch_mlockall:
 #elasticsearch_plugins:
 #  - lmenezes/elasticsearch-kopf
