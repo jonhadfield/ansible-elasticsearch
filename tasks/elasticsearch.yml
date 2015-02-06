@@ -36,10 +36,25 @@
   template: src=elasticsearch-sysvinit.j2 dest=/etc/init.d/elasticsearch owner=root group=root mode=0755
   notify:
     - restart elasticsearch
-- name: install elasticsearch sysconfig
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+- name: install elasticsearch startup script
+  template: src=elasticsearch-sysvinit-debian.j2 dest=/etc/init.d/elasticsearch owner=root group=root mode=0755
+  notify:
+    - restart elasticsearch
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+- name: install elasticsearch service config
   template: src=elasticsearch-sysconfig.j2 dest=/etc/sysconfig/elasticsearch owner=root group=root mode=0755
   notify:
     - restart elasticsearch
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+- name: install elasticsearch sysconfig (EL)
+  template: src=elasticsearch-sysconfig.j2 dest=/etc/default/elasticsearch owner=root group=root mode=0755
+  notify:
+    - restart elasticsearch
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
+
 - name: install elasticsearch configuration
   template: src=elasticsearch-config.yml.j2 dest={{ elasticsearch_base_install_dir }}/elasticsearch-{{ elasticsearch_version }}/config/elasticsearch.yml owner=elsearch group=elsearch mode=0755
   notify:
@@ -72,3 +87,4 @@
 # Run
 - name: ensure elasticsearch is started runs on boot
   service: name=elasticsearch state=started enabled=yes
+  #when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
