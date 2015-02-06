@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  remote_user: travis
+  sudo: yes
+  roles:
+    - ansible-elasticsearch
