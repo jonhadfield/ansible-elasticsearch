@@ -1,5 +1,6 @@
 elasticsearch
 ========
+[![Build Status](https://api.travis-ci.org/jonhadfield/ansible-elasticsearch.svg?branch=master)](https://travis-ci.org/jonhadfield/ansible-elasticsearch)
 
 Ansible role that installs and configures elasticsearch.
 
